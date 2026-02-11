@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আপনি কোন টাইপের ভোটার? - শফিকুল ইসলাম</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Hind Siliguri', sans-serif; background: #f8fafc; color: #1e293b; }
+        .voter-card { box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-radius: 2rem; overflow: hidden; }
+        .btn-gradient { background: linear-gradient(135deg, #2563eb, #7c3aed); transition: all 0.3s; }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
+        .loader { border-top-color: #7c3aed; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        canvas { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans flex flex-col items-center justify-start min-h-screen overflow-hidden">
+  <div class="w-full max-w-lg mt-8 px-4 flex flex-col">
+    <!-- Header Section -->
+    <div class="w-full max-w-lg mt-8 px-4">
+        <div class="text-center mb-6">
+            <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                আপনি কোন টাইপের ভোটার?
+            </h1>
+            <p class="text-gray-500 mt-2">নিচের বক্সে আপনার নাম লিখুন এবং আপনার টাইপ জানুন!</p>
+        </div>
+
+        <!-- Main Card UI -->
+        <div class="voter-card bg-white p-6 md:p-8">
+            <!-- Form Area -->
+            <div id="input-area" class="space-y-5">
+                <input type="text" id="userName" placeholder="আপনার নাম (যেমন: শফিক)" 
+                    class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:border-purple-400 outline-none text-lg text-center font-semibold">
+                
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="selectMood('funny', this)" class="mood-btn p-3 border-2 border-purple-500 bg-purple-50 rounded-xl flex flex-col items-center transition-all" id="default-mood">
+                        <span class="text-2xl">😂</span> <span class="text-xs font-bold">ফানি</span>
+                    </button>
+                    <button onclick="selectMood('cool', this)" class="mood-btn p-3 border-2 border-transparent bg-gray-50 rounded-xl flex flex-col items-center transition-all">
+                        <span class="text-2xl">😎</span> <span class="text-xs font-bold">কুল</span>
+                    </button>
+                    <button onclick="selectMood('tired', this)" class="mood-btn p-3 border-2 border-transparent bg-gray-50 rounded-xl flex flex-col items-center transition-all">
+                        <span class="text-2xl">😴</span> <span class="text-xs font-bold">টায়ার্ড</span>
+                    </button>
+                </div>
+
+                <button onclick="generateMagic()" class="w-full btn-gradient text-white font-bold py-5 rounded-2xl shadow-lg flex justify-center items-center gap-2">
+                    ম্যাজিক দেখুন <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </button>
+                
+                <p class="text-[10px] text-center text-gray-400 uppercase tracking-widest">© DEVELOPED BY SOFIKUL ISLAM</p>
+            </div>
+
+            <!-- Loading UI -->
+            <div id="loading-area" class="hidden py-16 text-center">
+                <div class="loader ease-linear rounded-full border-4 h-12 w-12 mx-auto mb-4"></div>
+                <p class="text-purple-600 font-bold animate-pulse">আপনার টাইপ চেক করা হচ্ছে...</p>
+            </div>
+
+            <!-- Result UI -->
+            <div id="result-area" class="hidden space-y-5 animate-in slide-in-from-bottom-5">
+                <img id="outputImage" class="w-full rounded-2xl border-4 border-gray-50 shadow-inner" src="" alt="Poster">
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="downloadImage()" class="bg-gray-800 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download"></i> সেভ করুন
+                    </button>
+                    <button onclick="shareResult()" class="bg-green-500 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-share"></i> শেয়ার করুন
+                    </button>
+                </div>
+                <button onclick="location.reload()" class="w-full text-gray-400 text-sm font-medium">← আবার চেষ্টা করুন</button>
+            </div>
+        </div>
+
+        <!-- Developer Footer -->
+        <footer class="mt-8 pt-6 border-t border-gray-200 text-center bg-white rounded-t-3xl shadow-inner">
+            <div class="flex justify-center gap-4 mb-4">
+                <a href="https://www.facebook.com/MD.SOFIKUL.ISLAM.OFFICIALL" class="h-9 w-9 bg-blue-600 text-white flex items-center justify-center rounded-full hover:scale-110 transition">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://github.com/MR-D4RK-OFFICIAL" class="h-9 w-9 bg-gray-800 text-white flex items-center justify-center rounded-full hover:scale-110 transition">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="t.me/MrGhostCipher" class="h-9 w-9 bg-blue-800 text-white flex items-center justify-center rounded-full hover:scale-110 transition">
+                    <i class="fa-brands fa-telegram"></i>
+                </a>
+            </div>
+            <p class="text-gray-700 font-bold">শফিকুল ইসলাম</p>
+            <p class="text-xs text-gray-400 mt-2 px-6 pb-4">
+                এই সাইটটি শুধুমাত্র বিনোদনের জন্য তৈরি।
+            </p>
+        </footer>
+    </div>
+
+    <!-- Hidden Rendering Canvas -->
+    <canvas id="posterCanvas" width="1080" height="1350"></canvas>
+
+    <script>
+        let currentMood = 'funny';
+        const siteURL = window.location.href.split('?')[0]; 
+
+        // ১৩টি ভোটার টাইপ
+        const types = [
+            { title: "বিরিয়ানি লাভার ভোটার 🍗", traits: ["• ভোট দিতে গিয়ে আগে বিরিয়ানি খুঁজে", "• মার্কা দেখে না, মাংসের পিস দেখে", "• সারাদিন বিরিয়ানির গল্প করে"] },
+            { title: "স্টাইলিশ সেলফি ভোটার 🤳", traits: ["• আঙুলের কালির ছবি না দিলে ভোট বৃথা", "• বুথের ভেতরেও পোজ খোঁজে", "• ফেসবুক লাইভে ভোটার স্লোগান দেয়"] },
+            { title: "কনফিউজড ভোটার 😵‍💫", traits: ["• ব্যালট হাতে পেয়ে দিগ্বিদিক হারায়", "• পোলিং অফিসারকে চিনেও চেনে না", "• কলম নিতে ভুলে যায়"] },
+            { title: "ঘুমকাতুরে ভোটার 😴", traits: ["• ভোটের লাইনে দাঁড়িয়েও ঝিমায়", "• ভোট দিয়ে এসে ৩ দিন ঘুমায়", "• সকালের ভোট বিকেলে দিতে যায়"] },
+            { title: "সিরিয়াস দেশপ্রেমিক 🇧🇩", traits: ["• ভোর ৫টা থেকে লাইনে দাঁড়িয়ে থাকে", "• নিয়ম নিয়ে সবার সাথে তর্ক করে", "• ভোট দিয়ে আঙুল উঁচিয়ে ঘুরে বেড়ায়"] },
+            { title: "চায়ের কাপে ঝড় তোলা ভোটার ☕", traits: ["• চায়ের দোকানে বসে ভোট বিশ্লেষণ করে", "• প্রার্থীকে না চিনলেও বড় বড় লেকচার দেয়", "• কাকে ভোট দিবে তা ভোটের দিন সকালে ঠিক করে"] },
+            { title: "সোশ্যাল মিডিয়া একটিভিস্ট 📱", traits: ["• আঙুলের কালির ফটোতে ১০টি ফিল্টার ব্যবহার করে", "• লাইনে দাঁড়ানো থেকে ভোট দেওয়া পর্যন্ত ১০টা স্টোরি দেয়", "• কমেন্ট বক্সে সবার সাথে তর্কে মেতে থাকে"] },
+            { title: "মার্কা পাগল ভোটার 🚩", traits: ["• প্রার্থীর চেহারা দেখে না, শুধু মার্কা দেখে", "• ভোটের আগের রাতে উত্তেজনায় ঘুমায় না", "• নিজের মার্কার জন্য জান দিয়ে দেয়"] },
+            { title: "কিপটা ও রহস্যময় ভোটার 🤫", traits: ["• কাকে ভোট দিয়েছে কাউকেই বলবে না", "• এমনকি নিজের স্বামী/স্ত্রীকেও সন্দেহ করে", "• ভোট দিয়ে এসে এমন ভাব করে যেন কিছুই হয়নি"] },
+            { title: "উৎসব প্রিয় ভোটার 🎉", traits: ["• ভোটকে ঈদের মতো মনে করে নতুন জামা পরে", "• ভোট শেষে মেলায় বা ঘুরতে যাওয়ার প্ল্যান থাকে", "• এলাকার সবার সাথে কুশল বিনিময় করে বেড়ায়"] },
+            { title: "ধরে আনা অনিচ্ছুক ভোটার 😩", traits: ["• বন্ধুদের চাপে ভোট দিতে বাধ্য হয়", "• ব্যালট হাতে পেয়ে চোখ বন্ধ করে সিল মারে", "• কখন বাসায় ফিরবে শুধু সেই চিন্তায় অস্থির থাকে"] },
+            { title: "মুরুব্বি উপদেষ্টা ভোটার 👴", traits: ["• ৭০ সালের নির্বাচনের গল্প শুনিয়ে লাইন গরম রাখে", "• পোলিং অফিসারকে মাঝেমধ্যে পরামর্শ দেয়", "• ভোট দিয়ে এসে এলাকার ভবিষ্যৎ নিয়ে চিন্তিত থাকে"] },
+            { title: "ডিজিটাল সচেতন ভোটার 🧐", traits: ["• ভোটার স্লিপ হারিয়ে গেলেও ফোনে অ্যাপ দিয়ে বের করে", "• প্রার্থীর বায়োডাটা ইন্টারনেটে চেক করে", "• আঙুলে কালি লাগানোর স্টাইল দেখে রেটিং দেয়"] }
+        ];
+
+        function selectMood(mood, btn) {
+            currentMood = mood;
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('border-purple-500', 'bg-purple-50'));
+            btn.classList.add('border-purple-500', 'bg-purple-50');
+        }
+
+        function generateMagic() {
+            const name = document.getElementById('userName').value.trim();
+            if (!name) return alert("বস, আপনার নামটা তো লিখুন!");
+
+            document.getElementById('input-area').classList.add('hidden');
+            document.getElementById('loading-area').classList.remove('hidden');
+
+            setTimeout(() => {
+                drawCard(name);
+                document.getElementById('loading-area').classList.add('hidden');
+                document.getElementById('result-area').classList.remove('hidden');
+            }, 1500);
+        }
+
+        function drawCard(name) {
+            const canvas = document.getElementById('posterCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // নাম অনুযায়ী ইনডেক্স নির্ধারণ
+            const index = Math.abs(name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % types.length);
+            const data = types[index];
+
+            const grad = ctx.createLinearGradient(0, 0, 1080, 1350);
+            if(currentMood === 'funny') { grad.addColorStop(0, '#A855F7'); grad.addColorStop(1, '#EC4899'); }
+            else if(currentMood === 'cool') { grad.addColorStop(0, '#1E293B'); grad.addColorStop(1, '#334155'); }
+            else { grad.addColorStop(0, '#94A3B8'); grad.addColorStop(1, '#64748B'); }
+            
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 1080, 1350);
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+            roundRect(ctx, 60, 60, 960, 1230, 50, true);
+
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#7c3aed";
+            ctx.font = "bold 45px 'Hind Siliguri'";
+            ctx.fillText(name + "-কোন টাইপের ভোটার?", 540, 180);
+
+            ctx.fillStyle = "#1e293b";
+            ctx.font = "bold 72px 'Hind Siliguri'";
+            ctx.fillText(data.title, 540, 320);
+
+            ctx.strokeStyle = "#ddd";
+            ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(250, 400); ctx.lineTo(830, 400); ctx.stroke();
+
+            ctx.textAlign = "left";
+            ctx.fillStyle = "#475569";
+            ctx.font = "500 42px 'Hind Siliguri'";
+            data.traits.forEach((t, i) => {
+                ctx.fillText(t, 200, 530 + (i * 100));
+            });
+
+            ctx.textAlign = "center";
+            ctx.font = "200px serif";
+            const emojiList = {
+                'funny': '🤣', 'cool': '😎', 'tired': '😴'
+            };
+            ctx.fillText(emojiList[currentMood], 540, 950);
+
+            ctx.fillStyle = "#94a3b8";
+            ctx.font = "bold 30px 'Hind Siliguri'";
+            ctx.fillText("নিজেও তৈরি করতে ভিজিট করুন: " + siteURL.replace('https://','').replace('http://',''), 540, 1120);
+            
+            ctx.fillStyle = "#7c3aed";
+            ctx.font = "bold 35px 'Hind Siliguri'";
+            ctx.fillText("DEVELOPED BY SOFIKUL ISLAM ", 540, 1180);
+
+            document.getElementById('outputImage').src = canvas.toDataURL('image/png');
+        }
+
+        async function shareResult() {
+            const canvas = document.getElementById('posterCanvas');
+            const dataUrl = canvas.toDataURL();
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], 'voter_type.png', { type: 'image/png' });
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'আমি কোন টাইপের ভোটার? 😂',
+                    text: 'এই সাইট দিয়ে আমার ভোটার টাইপ বের করলাম! আপনিও ট্রাই করুন।',
+                    url: siteURL,
+                    files: [file]
+                });
+            } else {
+                window.open(`https://wa.me/?text=আমার ভোটার টাইপ দেখুন এখানে: ${siteURL}`, '_blank');
+            }
+        }
+
+        function downloadImage() {
+            const a = document.createElement('a');
+            a.download = 'voter-personality.png';
+            a.href = document.getElementById('outputImage').src;
+            a.click();
+        }
+
+        function roundRect(ctx, x, y, width, height, radius, fill) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+        }
+    </script>
+</body>
+</html>
